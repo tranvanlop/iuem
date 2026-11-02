@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile Mockup Window - Châu Minh Hiếu</title>
+  <!-- Google Fonts & Font Awesome Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    /* --- BIẾN MÀU (LIGHT MODE MẶC ĐỊNH) --- */
+    :root {
+      --bg-body: #eef2f5;
+      --bg-window: #ffffff;
+      --bg-header: #f8fafc;
+      --bg-card: #f8fafc;
+      --bg-box: #ffffff;
+      --border-color: #e2e8f0;
+      --text-main: #0f172a;
+      --text-sub: #475569;
+      --text-muted: #64748b;
+      --accent-color: #3b82f6;
+      --tag-bg: #e2e8f0;
+      --tag-text: #475569;
+    }
+
+    /* --- BIẾN MÀU (DARK MODE) --- */
+    body.dark-mode {
+      --bg-body: #0f172a;
+      --bg-window: #1e293b;
+      --bg-header: #0f172a;
+      --bg-card: #0f172a;
+      --bg-box: #1e293b;
+      --border-color: #334155;
+      --text-main: #f8fafc;
+      --text-sub: #cbd5e1;
+      --text-muted: #94a3b8;
+      --accent-color: #60a5fa;
+      --tag-bg: #334155;
+      --tag-text: #cbd5e1;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    }
+
+    body {
+      background-color: var(--bg-body);
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+      color: var(--text-main);
+    }
+
+    /* Khung cửa sổ chính */
+    .window-container {
+      width: 100%;
+      max-width: 950px;
+      background: var(--bg-window);
+      border-radius: 12px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+      border: 1px solid var(--border-color);
+      overflow: hidden;
+    }
+
+    /* Thanh điều khiển cửa sổ */
+    .window-header {
+      background: var(--bg-header);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-color);
+      font-family: 'Fira Code', monospace;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .window-dots {
+      display: flex;
+      gap: 8px;
+    }
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    .dot-red { background: #ff5f56; }
+    .dot-yellow { background: #ffbd2e; }
+    .dot-green { background: #27c93f; }
+    
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Nút Chuyển Đổi Dark/Light Mode */
+    .theme-toggle-btn {
+      background: var(--bg-box);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Fira Code', monospace;
+    }
+    .theme-toggle-btn:hover {
+      border-color: var(--accent-color);
+      color: var(--accent-color);
+    }
+
+    .window-title {
+      font-weight: 500;
+    }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background: #10b981;
+      border-radius: 50%;
+    }
+
+    /* Nội dung bên trong cửa sổ */
+    .window-body {
+      padding: 24px;
+    }
+
+    /* Profile Header & Banner */
+    .profile-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+    
+    /* 2. CHỈNH SỬA ẢNH BÌA TẠI ĐÂY */
+    .banner {
+      height: 160px;
+      /* Thay URL ảnh bìa của bạn vào ngoặc bên dưới */
+      background: linear-gradient(135deg, rgba(99,102,241,0.6), rgba(168,85,247,0.6)), 
+                  url('https://i.pinimg.com/originals/cf/53/a4/cf53a4263a591d53a7fdd0c0ef9847c8.jpg');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+
+    .banner-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(0,0,0,0.5);
+      color: #fff;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      backdrop-filter: blur(4px);
+    }
+    .profile-info {
+      padding: 0 24px 20px 24px;
+      position: relative;
+    }
+    
+    /* 2. CHỈNH SỬA AVATAR TẠI ĐÂY */
+    .avatar-wrapper {
+      position: relative;
+      top: -40px;
+      margin-bottom: -30px;
+      display: inline-block;
+    }
+    .avatar {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      border: 4px solid var(--bg-window);
+      object-fit: cover;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .user-name {
+      font-size: 22px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-main);
+    }
+    .verified-icon {
+      color: var(--accent-color);
+      font-size: 16px;
+    }
+    .user-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .tag {
+      background: var(--tag-bg);
+      color: var(--tag-text);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-family: 'Fira Code', monospace;
+    }
+
+    /* Bố cục Grid 2 cột */
+    .grid-container {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    @media (min-width: 768px) {
+      .grid-container {
+        grid-template-columns: 1.6fr 1fr;
+      }
+    }
+
+    /* các Box thông tin */
+    .section-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+    .section-box:last-child {
+      margin-bottom: 0;
+    }
+    .section-title {
+      font-size: 13px;
+      font-family: 'Fira Code', monospace;
+      color: var(--accent-color);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .bio-text {
+      font-size: 14px;
+      color: var(--text-sub);
+      line-height: 1.6;
+    }
+
+    /* Tech Cards Grid */
+    .tech-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .tech-card {
+      background: var(--bg-box);
+      border: 1px solid var(--border-color);
+      padding: 10px 12px;
+      border-radius: 8px;
+    }
+    .tech-card-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+    .tech-card-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* 1. MẠNG XÃ HỘI (BUTTONS) */
+    .links-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .social-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-box);
+      border: 1px solid var(--border-color);
+      padding: 10px 12px;
+      border-radius: 6px;
+      color: var(--text-sub);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .social-btn:hover {
+      border-color: var(--accent-color);
+      color: var(--accent-color);
+      transform: translateY(-2px);
+    }
+
+    /* 3. NHẠC SPOTIFY EMBED WIDGET */
+    .spotify-container {
+      width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      border: none;
+    }
+
+    /* Footer cửa sổ */
+    .window-footer {
+      background: var(--bg-header);
+      padding: 8px 16px;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      font-family: 'Fira Code', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Khung Cửa Sổ Máy Tính -->
+  <div class="window-container">
+    
+    <!-- Thanh Tiêu Đề Cửa Sổ -->
+    <div class="window-header">
+      <div class="window-dots">
+        <span class="dot dot-red"></span>
+        <span class="dot dot-yellow"></span>
+        <span class="dot dot-green"></span>
+      </div>
+      
+      <div class="window-title">pid: 2110 • vanlop • local</div>
+
+      <div class="header-actions">
+        <!-- 4. Nút Chuyển Đổi Dark / Light Mode -->
+        <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()">
+          <i class="fa-solid fa-moon"></i> <span id="themeText">Dark</span>
+        </button>
+
+        <div class="status-badge">
+          <span class="status-dot"></span> online
+        </div>
+      </div>
+    </div>
+
+    <!-- Thân Cửa Sổ -->
+    <div class="window-body">
+      
+      <!-- Thông Tin Cá Nhân & Ảnh Bìa -->
+      <div class="profile-card">
+        <div class="banner">
+          <span class="banner-badge"><i class="fa-brands fa-discord"></i> discord lanyard live</span>
+        </div>
+        <div class="profile-info">
+          
+          <!-- 2. THAY ĐỔI LINK ANH AVATAR CỦA BẠN VÀO KHUNG SRC DƯỚI ĐÂY -->
+          <div class="avatar-wrapper">
+            <img src="https://maydongphucsaoviet.com/wp-content/uploads/anh-gai-xinh-ngau-lanh-lung-che-mat-1920px-1080px-full-hd-10.png" alt="Avatar Châu Minh Hiếu" class="avatar">
+          </div>
+          
+          <h1 class="user-name">
+            Châu Minh Hiếu 
+            <i class="fa-solid fa-circle-check verified-icon"></i>
+          </h1>
+          <div class="user-tags">
+            <span class="tag">@tranvanlop</span>
+            <span class="tag"><i class="fa-solid fa-code"></i> Mãi Là Lốp Của Em</span>
+            <span class="tag"><i class="fa-solid fa-location-dot"></i> Việt Nam</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bố Cục 2 Cột -->
+      <div class="grid-container">
+        
+        <!-- Cột Trái -->
+        <div class="left-col">
+          
+          <!-- Giới thiệu -->
+          <div class="section-box">
+            <div class="section-title">Mê Gái Không Mê Trai</div>
+            <p class="bio-text">
+              Cơm Áo Gạo Tiền<br><br>
+              Đối Sao Đáp Vậy
+            </p>
+          </div>
+
+          <!-- Kỹ năng (Tech Stack / Sở Thích) -->
+          <div class="section-box">
+            <div class="section-title"><i class="fa-solid fa-layer-group"></i> Sở Thích - Năng Khiếu</div>
+            <div class="tech-grid">
+              <div class="tech-card">
+                <div class="tech-card-title">Chơi Game FPS</div>
+                <div class="tech-card-sub">CS2 • Valorant • Overwatch 2</div>
+              </div>
+              <div class="tech-card">
+                <div class="tech-card-title">Boy Xe Độ</div>
+                <div class="tech-card-sub">Jet Jet</div>
+              </div>
+              <div class="tech-card">
+                <div class="tech-card-title">Cây Đập S1 Bóng Chuyền</div>
+                <div class="tech-card-sub">Cụ thể là đập đá</div>
+              </div>
+              <div class="tech-card">
+                <div class="tech-card-title">Anh Biết Tính Toán</div>
+                <div class="tech-card-sub">Nhưng không biết tính em :(</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 1. THAY LINK TRANG CÁ NHÂN VÀO HREF DƯỚI ĐÂY -->
+          <div class="section-box">
+            <div class="section-title"><i class="fa-solid fa-link"></i> Mạng Xã Hội</div>
+            <div class="links-grid">
+              <!-- Thay link Facebook của bạn -->
+              <a href="https://www.facebook.com/mih.hiu.950112" target="_blank" class="social-btn">
+                <i class="fa-brands fa-facebook" style="color: #1877f2;"></i> Facebook
+              </a>
+              <!-- Thay link/mã mời Discord của bạn -->
+              <a href="https://discord.com/users/1178912115478777951" target="_blank" class="social-btn">
+                <i class="fa-brands fa-discord" style="color: #5865f2;"></i> Discord
+              </a>
+              <!-- Thay link Profile Spotify của bạn -->
+              <a href="https://open.spotify.com/user/315c2xryacsqyc5657bjxvzeytui" target="_blank" class="social-btn">
+                <i class="fa-brands fa-spotify" style="color: #1db954;"></i> Spotify
+              </a>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Cột Phải -->
+        <div class="right-col">
+          
+          <!-- Trạng Thái Discord Realtime -->
+          <div class="section-box">
+            <div class="section-title"><i class="fa-brands fa-discord"></i> Discord realtime presence</div>
+            <div style="font-size: 13px; color: var(--text-muted);">
+              Status: <span style="color: #10b981; font-weight: 600;">Music Lofi Chill</span>
+            </div>
+          </div>
+
+          <!-- 3. TRÌNH PHÁT NHẠC SPOTIFY EMBED (Phát nhạc trực tiếp) -->
+          <div class="section-box">
+            <div class="section-title"><i class="fa-solid fa-music"></i> Spotify Music Player</div>
+            <!-- Thay mã bài hát Spotify của bạn ở thuộc tính src bên dưới (sau chữ /track/) -->
+            <iframe 
+              class="spotify-container"
+              src="https://open.spotify.com/embed/track/2HEd2fkMbbIclpv8pYvWW0" 
+              height="152" 
+              frameBorder="0" 
+              allowfullscreen="" 
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+              loading="lazy">
+            </iframe>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Thanh Trạng Thái Dưới Cùng (Footer) -->
+    <div class="window-footer">
+      <span id="liveClock">19:30:16 (GMT+7)</span>
+      <span>build: chamfer-profile-v2.4</span>
+      <span>18ms • online</span>
+    </div>
+
+  </div>
+
+  <!-- JAVASCRIPT HỖ TRỢ DARK MODE & ĐỒNG HỒ REALTIME -->
+  <script>
+    // 4. Xử lý Chuyển đổi Light / Dark Mode
+    function toggleTheme() {
+      const body = document.body;
+      const themeBtn = document.getElementById('themeToggleBtn');
+      const themeText = document.getElementById('themeText');
+
+      body.classList.toggle('dark-mode');
+
+      if (body.classList.contains('dark-mode')) {
+        themeBtn.innerHTML = '<i class="fa-solid fa-sun"></i> <span id="themeText">Light</span>';
+        localStorage.setItem('theme', 'dark');
+      } else {
+        themeBtn.innerHTML = '<i class="fa-solid fa-moon"></i> <span id="themeText">Dark</span>';
+        localStorage.setItem('theme', 'light');
+      }
+    }
+
+    // Tự động giữ chế độ theme đã chọn trước đó
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark-mode');
+      document.getElementById('themeToggleBtn').innerHTML = '<i class="fa-solid fa-sun"></i> <span>Light</span>';
+    }
+
+    // Cập nhật đồng hồ thời gian thực ở góc dưới
+    function updateClock() {
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+      document.getElementById('liveClock').innerText = `${hours}:${minutes}:${seconds} (GMT+7)`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+  </script>
+
+</body>
+</html>
